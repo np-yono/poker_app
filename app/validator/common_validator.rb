@@ -41,7 +41,7 @@ module Common_Validator
       m = n + 1
       suits_element = item.split("")[0]
 
-      if item.delete(suits_element)[0] == "0"
+      if item.delete(suits_element)[0] == "0" && item != "10"
       error_array2.push("#{m}番目のカード指定文字が不正です。(#{item}) ")
       end
 
