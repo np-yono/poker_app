@@ -10,18 +10,17 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context '値が正常に入力される' do
       before do
-
         @request       = "{\"cards\":[
-                                        \"S9 S10 S11 S12 S13\",
-                                        \"D9 S10 S11 S12 S13\",
-                                        \"S8 S10 S11 S12 S13\",
-                                        \"S12 S13 D13 H13 C13\",
-                                        \"S12 D12 S13 D13 H13\",
-                                        \"S11 S12 S13 D13 H13\",
-                                        \"S11 S12 D12 S13 D13\",
-                                        \"S10 S11 S12 S13 D13\",
-                                        \"D1 H5 S12 H11 C8\"
-                                     ] }"
+                                       \"S9 S10 S11 S12 S13\",
+                                       \"D9 S10 S11 S12 S13\",
+                                       \"S8 S10 S11 S12 S13\",
+                                       \"S12 S13 D13 H13 C13\",
+                                       \"S12 D12 S13 D13 H13\",
+                                       \"S11 S12 S13 D13 H13\",
+                                       \"S11 S12 D12 S13 D13\",
+                                       \"S10 S11 S12 S13 D13\",
+                                       \"D1 H5 S12 H11 C8\"
+                                      ] }"
         post '/api/v1/poker_hands', params: @request
         @json          = JSON.parse(response.body)
         @expected_json = {"result" => [
@@ -34,7 +33,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                         {"card"=>"S11 S12 D12 S13 D13", "hand"=>"ツーペア", "best"=>"false"},
                                         {"card"=>"S10 S11 S12 S13 D13", "hand"=>"ワンペア", "best"=>"false"},
                                         {"card"=>"D1 H5 S12 H11 C8", "hand"=>"ハイカード", "best"=>"false"}
-                                      ] }
+                                       ] }
       end
 
         it 'リクエストが201 Created となること' do
@@ -47,16 +46,79 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
     end
 
 
-    # APIのValiadtionではじかれる場合 #######################################################################################################################################################################################
+    # APIのvaliadtionではじかれる場合 #######################################################################################################################################################################################
+
+    context 'cardsと入力されない場合' do
+      before do
+        @request       = "{\"cards\":[\"S9 S11 S12 S13\"],\"card\":[\"S8 S11 S12 S13\"] }"
+        post '/api/v1/poker_hands', params: @request
+        @json          = JSON.parse(response.body)
+        @expected_json = {"error" =>"keyは１つにしてください。"}
+      end
+
+      it 'リクエストが500 InternalServerErrorとなること' do
+        expect(response.status).to eq(500)
+      end
+      it '期待したエラーメッセージを返すこと' do
+        expect(@json).to eq @expected_json
+      end
+    end
+
+    context 'cardsと入力されない場合' do
+      before do
+        @request       = "{\"card\":[\"S9 S11 S12 S13\"] }"
+        post '/api/v1/poker_hands', params: @request
+        @json          = JSON.parse(response.body)
+        @expected_json = {"error" =>"keyはcardsと入力してください。"}
+      end
+
+      it 'リクエストが500 InternalServerErrorとなること' do
+        expect(response.status).to eq(500)
+      end
+      it '期待したエラーメッセージを返すこと' do
+        expect(@json).to eq @expected_json
+      end
+    end
 
 
+    context 'cardsのvalueが配列で入力されない場合' do
+      before do
+        @request       = "{\"cards\":{} }"
+        post '/api/v1/poker_hands', params: @request
+        @json          = JSON.parse(response.body)
+        @expected_json = {"error" =>"cardsのvalueは配列で入力してください。"}
+      end
+
+      it 'リクエストが500 InternalServerErrorとなること' do
+        expect(response.status).to eq(500)
+      end
+      it '期待したエラーメッセージを返すこと' do
+        expect(@json).to eq @expected_json
+      end
+    end
+
+
+    context '配列の要素がない場合' do
+      before do
+        @request       = "{\"cards\":[] }"
+        post '/api/v1/poker_hands', params: @request
+        @json          = JSON.parse(response.body)
+        @expected_json = {"error" =>"配列の要素がありません。"}
+      end
+
+      it 'リクエストが500 InternalServerErrorとなること' do
+        expect(response.status).to eq(500)
+      end
+      it '期待したエラーメッセージを返すこと' do
+        expect(@json).to eq @expected_json
+      end
+    end
 
 
     # Common_Validator 1 にはじかれる場合 #######################################################################################################################################################################################
 
     context 'Common_validation 1 にはじかれる（要素が５つない）' do
       before do
-
         @request       = "{\"cards\":[
                                       \"S9 S11 S12 S13\",
                                       \"S8 S9 S10 S11 S12 S13\",
@@ -82,7 +144,6 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 1 にはじかれる（半角スペース以外で区切っている）' do
       before do
-
         @request       = "{\"cards\":[
                                       \"S9　S10 S11 S12 S13\",
                                       \"S9  S10 S11 S12 S13\",
@@ -113,7 +174,6 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 1 にはじかれる（要素の重複,要素に小数・演算が含まれる）' do
       before do
-
         @request       = "{\"cards\":[
                                       \"S10 S10 S11 S12 S13\",
                                       \"S1.1 S10 S11 S12 S13\",
@@ -142,7 +202,6 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 2 にはじかれる（スートが指定文字でない）' do
       before do
-
         @request       = "{\"cards\":[
                                       \"9 S10 S11 S12 S13\",
                                       \"S9 Ｓ10 S11 S12 S13\",
@@ -154,13 +213,13 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
         post '/api/v1/poker_hands', params: @request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" => [
-            {"card"=>"9 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-            {"card"=>"S9 Ｓ10 S11 S12 S13", "hand"=>"2番目のカード指定文字が不正です。(Ｓ10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-            {"card"=>"S9 S10 s11 S12 S13", "hand"=>"3番目のカード指定文字が不正です。(s11) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-            {"card"=>"S9 S10 S11 A12 S13", "hand"=>"4番目のカード指定文字が不正です。(A12) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-            {"card"=>"S9 S10 S11 S12 ё13", "hand"=>"5番目のカード指定文字が不正です。(ё13) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-            {"card"=>"@9 SS10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(@9) ,2番目のカード指定文字が不正です。(SS10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"}
-        ] }
+                                      {"card"=>"9 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
+                                      {"card"=>"S9 Ｓ10 S11 S12 S13", "hand"=>"2番目のカード指定文字が不正です。(Ｓ10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
+                                      {"card"=>"S9 S10 s11 S12 S13", "hand"=>"3番目のカード指定文字が不正です。(s11) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
+                                      {"card"=>"S9 S10 S11 A12 S13", "hand"=>"4番目のカード指定文字が不正です。(A12) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
+                                      {"card"=>"S9 S10 S11 S12 ё13", "hand"=>"5番目のカード指定文字が不正です。(ё13) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
+                                      {"card"=>"@9 SS10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(@9) ,2番目のカード指定文字が不正です。(SS10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"}
+                                     ] }
       end
 
       it 'リクエストが201 Created となること' do
@@ -175,7 +234,6 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 2 にはじかれる（数字が指定文字でない）' do
       before do
-
         @request       = "{\"cards\":[
                                       \"S S10 S11 S12 S13\",
                                       \"S９ S10 S11 S12 S13\",
@@ -209,7 +267,6 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 2 にはじかれる（スートと数字の間に文字が入る）' do
       before do
-
         @request       = "{\"cards\":[
                                       \"S@9 S10 S11 S12 S13\"
                                      ] }"
