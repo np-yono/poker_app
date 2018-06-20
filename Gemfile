@@ -35,20 +35,20 @@ gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  #gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'rspec-rails', '~> 3.7.2'
-  gem 'factory_girl_rails', '~> 3.0'
-  gem 'guard-rspec'
-  gem 'spring-commands-rspec'
+  #gem 'factory_girl_rails', '~> 3.0'
+  #gem 'guard-rspec'
+  #gem 'spring-commands-rspec'
   gem 'rails-controller-testing'
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
-  gem 'devise'
-  gem 'faker'
+  #gem 'capybara', '~> 2.13'
+  #gem 'selenium-webdriver'
+  #gem 'devise'
+  #gem 'faker'
 end
 
 group :development do
@@ -62,7 +62,7 @@ end
 
 group :test do
   gem 'database_cleaner'
-  gem 'launchy'
+  #gem 'launchy'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
