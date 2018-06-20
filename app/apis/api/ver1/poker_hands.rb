@@ -1,11 +1,6 @@
 require_relative '../../../controllers/concerns/common'
 include Common
 
-# module API
-#   module Ver1
-#     class PokerHand < Grape::API
-#       resource :poker_hand do
-
 module API
   module Ver1
     class Poker_hands < Grape::API
