@@ -59,7 +59,7 @@ module Common
     valid
 
     # hash for API
-    @hash = {card: @post,hands: @yaku,best: @point}
+    @hash = {card: @post,hand: @yaku,best: @point}
 
 
   end

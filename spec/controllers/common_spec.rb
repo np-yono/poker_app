@@ -6,7 +6,7 @@ RSpec.describe Common do
 
   describe '#check' do
 
-    # checkアクション（役判定）
+    # checkアクション（役判定）###################################################################################
     context 'validationを抜けて役判定される' do
       it 'ストレートフラッシュになる' do
         @post = "S9 S10 S11 S12 S13"
@@ -45,20 +45,6 @@ RSpec.describe Common do
         expect(check{@post}).to eq card: "D8 S10 S11 S12 S13",hands: "ハイカード", best: 1
       end
     end
-
-    # context 'validation 1 にはじかれる' do
-    #   it 'エラーになる' do
-    #     @post = "S9S10 S11 S12 S13"
-    #     expect(check{@post}).to eq card: "S9S10 S11 S12 S13",hands: "ストレートフラッシュ", best: 0
-    #   end
-    # end
-    #
-    # context 'validation 2 にはじかれる' do
-    #    it 'エラーになる' do
-    #     @post = "s9 S10 S11 S12 S13"
-    #     expect(check{@post}).to eq card: "s9 S10 S11 S12 S13",hands: "ストレートフラッシュ", best: 0
-    #    end
-    # end
 
   end
 end

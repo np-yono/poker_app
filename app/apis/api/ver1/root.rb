@@ -5,7 +5,9 @@ module API
       version 'v1'
       format :json
 
-      mount API::Ver1::Poker_hands
+      # mount API::Ver1
+        mount API::Ver1::Poker_hands
+
       # mount API::Ver1::Poker_cheak
     end
   end

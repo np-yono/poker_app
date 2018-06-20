@@ -3,6 +3,7 @@ require_relative '../rails_helper'
 RSpec.describe PostsController, type: :controller do
 
 
+  # 正常に入力される場合 #########################################################
   describe 'Post #result' do
 
     context '値が正常に入力される場合（ストレートフラッシュ）' do
@@ -221,7 +222,9 @@ RSpec.describe PostsController, type: :controller do
       end
     end
 
-    context '値が正常に入力されない場合(Validation1)' do
+    # 正常に入力されない場合 #########################################################
+
+    context 'Validation1にはじかれる' do
       before do
         @post = {content: "S9S10 S11 S12 S13"}
         post :result, params: @post
@@ -241,7 +244,7 @@ RSpec.describe PostsController, type: :controller do
       end
     end
 
-    context '値が正常に入力されない場合(Validation1, 未入力)' do
+    context '未入力でValidation1にはじかれる' do
       before do
         @post = {content: ""}
         post :result, params: @post
@@ -261,7 +264,7 @@ RSpec.describe PostsController, type: :controller do
       end
     end
 
-    context '値が正常に入力されない場合(Validation2)' do
+    context 'Validation2にはじかれる' do
       before do
         @post = {content: "S 10 S１１ A12 S19"}
         post :result, params: @post

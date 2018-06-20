@@ -1,6 +1,11 @@
 require_relative '../../../controllers/concerns/common'
 include Common
 
+# module API
+#   module Ver1
+#     class PokerHand < Grape::API
+#       resource :poker_hand do
+
 module API
   module Ver1
     class Poker_hands < Grape::API
@@ -21,7 +26,6 @@ module API
 
 
         post do
-
           # 形式のvalidation
           # if
           #  error!('JSONで入力してください。')
@@ -66,7 +70,7 @@ module API
             check
 
             if @hash.has_value?(0)
-              @hash.store(:hands, @error)
+              @hash.store(:hand, @error)
               error_array.push(@hash)
             else
               poker_array.push(@hash)
