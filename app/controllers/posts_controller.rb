@@ -9,14 +9,8 @@ class PostsController < ApplicationController
         # 値を受け取る
         @post = params[:content]
 
-
         # 役判定
-        check
-
-        # error処理
-        if @error
-          @yaku = nil
-        end
+        hand_action
 
         # topページに戻る
         render("home/top")

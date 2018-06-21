@@ -60,7 +60,7 @@ module API
            poker_posts.each do |poker_post|
             @post = poker_post
 
-            check
+            hand_action
 
             if @hash.has_value?(0)
               @hash.store(:hand, @error)

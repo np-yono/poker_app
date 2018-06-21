@@ -1,6 +1,6 @@
 module Common_Validator
 
-  def valid
+  def hand_valid
 
     # Validation 1（半角スペース区切り、要素５つ）
 
