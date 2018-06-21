@@ -1,8 +1,8 @@
 require_relative '../spec_helper'
-require_relative '../../app/controllers/concerns/common'
-include Common
+require_relative '../../app/controllers/concerns/common_actioner'
+include Common_Actioner
 
-RSpec.describe Common do
+RSpec.describe Common_Actioner do
 
   describe '#hand_action' do
 
