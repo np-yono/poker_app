@@ -6,44 +6,43 @@ module API
     class Poker_hands < Grape::API
       resource :poker_hands do
 
+        error_message = "不正なリクエストです。"
 
         # POST /api/v1/poker_hands
 
         # URLのvalidation
         # if
-        #  error!('指定のURLを入力してください。')
+        #  error!("error":{"msg": error_message})
         # end
 
         # 未入力のvalidation
         # if
-        #  error!('入力してください。')
+        #  error!("error":{"msg": error_message})
+        # end
+
+        # 形式のvalidation
+        # if
+        #   error!("error":{"msg": error_message})
         # end
 
 
         post do
-          # 形式のvalidation
-          # if
-          #  error!('JSONで入力してください。')
-          # end
+
 
           # requestを受け取る
           post = JSON.parse request.body.read
 
            # keyのvalidation
-           if post.keys.count != 1
-             error!('keyは１つにしてください。')
-           elsif post.keys.join("") != "cards"
-             error!('keyはcardsと入力してください。')
+           if post.keys.count != 1 || post.keys.join("") != "cards"
+             error!("error":{"msg": error_message})
            end
 
            # 配列の取り出し
            poker_posts = post["cards"]
 
           # 配列のvalidation
-          if poker_posts.class != Array
-            error!('cardsのvalueは配列で入力してください。')
-          elsif poker_posts.empty?
-            error!('配列の要素がありません。')
+          if poker_posts.class != Array || poker_posts.empty?
+            error!("error":{"msg": error_message})
           end
 
           params do
