@@ -1,8 +1,8 @@
-require_relative 'concerns/common'
+require_relative './concerns/common_actioner'
 
 class PostsController < ApplicationController
 
-    include Common
+    include Common_Actioner
 
      def result
 

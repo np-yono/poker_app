@@ -1,5 +1,5 @@
-require_relative '../../../controllers/concerns/common'
-include Common
+require_relative '../../../controllers/concerns/common_actioner'
+include Common_Actioner
 
 module API
   module Ver1
