@@ -25,32 +25,35 @@ module Common_Checker
     #　役判定 （@point:役の点数）
     if numbers_variety == 5 && suits_variety == 1 && numbers_gap == 4
       @yaku = "ストレートフラッシュ"
-      @point = 9
+      point = 9
     elsif numbers_variety == 5 && suits_variety >= 2 && numbers_gap == 4
       @yaku = "ストレート"
-      @point = 8
+      point = 8
     elsif suits_variety == 1
       @yaku = "フラッシュ"
-      @point = 7
+      point = 7
     elsif numbers_mode == 4
       @yaku = "フォー・オブ・ア・カインド"
-      @point = 6
+      point = 6
     elsif numbers_variety == 2 && numbers_mode == 3
       @yaku = "フルハウス"
-      @point = 5
+      point = 5
     elsif numbers_variety == 3 && numbers_mode == 3
       @yaku = "スリー・オブ・ア・カインド"
-      @point = 4
+      point = 4
     elsif numbers_variety == 3 && numbers_mode == 2
       @yaku = "ツーペア"
-      @point = 3
+      point = 3
     elsif numbers_variety == 4 && numbers_mode == 2
       @yaku = "ワンペア"
-      @point = 2
+      point = 2
     else
       @yaku = "ハイカード"
-      @point = 1
+      point = 1
     end
+
+    # hash for API
+    @hash = {card: @post,hand: @yaku,best: point}
 
   end
 

@@ -1,5 +1,7 @@
-require_relative '../../../controllers/concerns/common_actioner'
-include Common_Actioner
+require_relative '../../../controllers/concerns/common_checker'
+require_relative '../../../validator/common_validator'
+include Common_Checker
+include Common_Validator
 
 module API
   module Ver1
@@ -52,24 +54,23 @@ module API
 
           # 役判定
             poker_array = []
-
             error_array = []
-
            points_array = []
 
-           poker_posts.each do |poker_post|
+          poker_posts.each do |poker_post|
             @post = poker_post
 
-            hand_action
+            hand_valid
 
-            if @hash.has_value?(0)
-              @hash.store(:hand, @error)
-              error_array.push(@hash)
-            else
+            if @common_error_array.last == "no problem"
+
+              hand_check
+
               poker_array.push(@hash)
+              points_array.push(@hash[:best])
+            else
+              error_array.push( {card: @post,msg: @common_error_array.last} )
             end
-
-            points_array.push(@point)
 
            end
 
@@ -87,24 +88,13 @@ module API
             end
           end
 
-          error_array.each do |small_error|
-            small_error.store(:best,"error")
-          end
-
-
 
           # response
           poker_hash = {}
 
-          if poker_array.empty?
-          else
-            poker_hash.store("result", poker_array)
-          end
+          poker_hash.store("result", poker_array) unless poker_array.empty?
 
-          if error_array.empty?
-          else
-            poker_hash.store("error", error_array)
-          end
+          poker_hash.store("error", error_array) unless error_array.empty?
 
           poker_hash
 
