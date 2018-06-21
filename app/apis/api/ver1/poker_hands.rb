@@ -8,8 +8,6 @@ module API
 
         error_message = "不正なリクエストです。"
 
-        # POST /api/v1/poker_hands
-
         # URLのvalidation
         # if
         #  error!("error":{"msg": error_message})
@@ -25,23 +23,25 @@ module API
         #   error!("error":{"msg": error_message})
         # end
 
+        # POST /api/v1/poker_hands
 
         post do
-
 
           # requestを受け取る
           post = JSON.parse request.body.read
 
-           # keyのvalidation
-           if post.keys.count != 1 || post.keys.join("") != "cards"
-             error!("error":{"msg": error_message})
-           end
+          # keyのvalidation
+          if post.keys.count != 1 || post.keys.join("") != "cards"
+            error!("error":{"msg": error_message})
+          end
 
-           # 配列の取り出し
-           poker_posts = post["cards"]
+
+          # 配列の取り出し
+          poker_posts = post["cards"]
+
 
           # 配列のvalidation
-          if poker_posts.class != Array || poker_posts.empty?
+          if poker_posts.empty?
             error!("error":{"msg": error_message})
           end
 
@@ -51,7 +51,6 @@ module API
 
 
           # 役判定
-
             poker_array = []
 
             error_array = []
