@@ -9,7 +9,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context '値が正常に入力される' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                      [
                                        \"S9 S10 S11 S12 S13\",
                                        \"D9 S10 S11 S12 S13\",
@@ -22,7 +22,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                        \"D1 H5 S12 H11 C8\"
                                       ]
                           }"
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"result" => [
                                         {"card"=>"S9 S10 S11 S12 S13", "hand"=>"ストレートフラッシュ", "best"=>"true"},
@@ -52,7 +52,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'cardsと入力されない場合' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                     [
                                      \"S9 S10 S11 S12 S13\"
                                     ],
@@ -62,7 +62,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                     ]
                            }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" =>{"msg"=>"不正なリクエストです。"}}
       end
@@ -77,13 +77,13 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'cardsと入力されない場合' do
       before do
-        @request       = "{\"card\":
+        request       = "{\"card\":
                                     [
                                      \"S9 S10 S11 S12 S13\"
                                     ]
                           }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" =>{"msg"=>"不正なリクエストです。"}}
       end
@@ -99,12 +99,12 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context '配列の要素がない場合' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                     [
                                     ]
                           }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" =>{"msg"=>"不正なリクエストです。"}}
       end
@@ -122,7 +122,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 1 にはじかれる（要素が５つない）' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                      [
                                       \"S9 S11 S12 S13\",
                                       \"S8 S9 S10 S11 S12 S13\",
@@ -130,12 +130,12 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                      ]
                           }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" => [
-                                       {"card"=>"S9 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"},
-                                       {"card"=>"S8 S9 S10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"},
-                                       {"card"=>"S9S10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"}
+                                       {"card"=>"S9 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                       {"card"=>"S8 S9 S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                       {"card"=>"S9S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"}
                                       ]
                           }
       end
@@ -151,7 +151,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 1 にはじかれる（半角スペース以外で区切っている）' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                      [
                                       \"S9　S10 S11 S12 S13\",
                                       \"S9  S10 S11 S12 S13\",
@@ -161,14 +161,14 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                      ]
                           }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" => [
-                                      {"card"=>"S9　S10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"},
-                                      {"card"=>"S9  S10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"},
-                                      {"card"=>"S9/S10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"},
-                                      {"card"=>"S9ㅤS10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"},
-                                      {"card"=>" S9 S10 S11 S12 S13", "hand"=>"5つのカード指定文字を半角スペース区切りで入力してください。", "best"=>"error"}
+                                      {"card"=>"S9　S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                      {"card"=>"S9  S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                      {"card"=>"S9/S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                      {"card"=>"S9ㅤS10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                      {"card"=>" S9 S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"}
                                      ]
                           }
       end
@@ -187,7 +187,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 2 にはじかれる（スートが指定文字でない）' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                      [
                                       \"9 S10 S11 S12 S13\",
                                       \"S9 Ｓ10 S11 S12 S13\",
@@ -198,15 +198,15 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                      ]
                            }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" => [
-                                      {"card"=>"9 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S9 Ｓ10 S11 S12 S13", "hand"=>"2番目のカード指定文字が不正です。(Ｓ10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S9 S10 s11 S12 S13", "hand"=>"3番目のカード指定文字が不正です。(s11) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S9 S10 S11 A12 S13", "hand"=>"4番目のカード指定文字が不正です。(A12) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S9 S10 S11 S12 ё13", "hand"=>"5番目のカード指定文字が不正です。(ё13) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"@9 SS10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(@9) ,2番目のカード指定文字が不正です。(SS10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"}
+                                      {"card"=>"9 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S9 Ｓ10 S11 S12 S13", "msg"=>"2番目のカード指定文字が不正です。(Ｓ10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S9 S10 s11 S12 S13", "msg"=>"3番目のカード指定文字が不正です。(s11) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S9 S10 S11 A12 S13", "msg"=>"4番目のカード指定文字が不正です。(A12) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S9 S10 S11 S12 ё13", "msg"=>"5番目のカード指定文字が不正です。(ё13) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"@9 SS10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(@9) ,2番目のカード指定文字が不正です。(SS10) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"}
                                      ]
                           }
       end
@@ -223,7 +223,7 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 2 にはじかれる（数字が指定文字でない）' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                      [
                                       \"S S10 S11 S12 S13\",
                                       \"S９ S10 S11 S12 S13\",
@@ -237,18 +237,18 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
                                      ]
                            }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" => [
-                                      {"card"=>"S S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S９ S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S９) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S@ S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S@) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"SA S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(SA) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"Sё S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(Sё) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S14 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S14) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S09 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S09) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S1.1 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S1.1) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"},
-                                      {"card"=>"S2*3 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S2*3) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"}
+                                      {"card"=>"S S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S９ S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S９) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S@ S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S@) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"SA S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(SA) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"Sё S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(Sё) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S14 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S14) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S09 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S09) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S1.1 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S1.1) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"S2*3 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S2*3) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"}
                                      ]
                           }
       end
@@ -264,16 +264,16 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
 
     context 'Common_validation 2 にはじかれる（スートと数字の間に文字が入る）' do
       before do
-        @request       = "{\"cards\":
+        request       = "{\"cards\":
                                      [
                                       \"S@9 S10 S11 S12 S13\"
                                      ]
                            }"
 
-        post '/api/v1/poker_hands', params: @request
+        post '/api/v1/poker_hands', params: request
         @json          = JSON.parse(response.body)
         @expected_json = {"error" => [
-                                      {"card"=>"S@9 S10 S11 S12 S13", "hand"=>"1番目のカード指定文字が不正です。(S@9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。", "best"=>"error"}
+                                      {"card"=>"S@9 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S@9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"}
                                      ]
                           }
       end
@@ -287,6 +287,73 @@ RSpec.describe API::Ver1::Poker_hands, type: :request do
       end
     end
 
+    # Common_validationにはじかれるエラーが混在している場合 #######################################################################################################################################################################################
 
+    context 'Common_validation 1とCommon_validation 2にはじかれるエラーが混在している場合、前者が優先される' do
+      before do
+        request       = "{\"cards\":
+                                     [
+                                      \"s9 SP S11 S12S13\"
+                                     ]
+                           }"
+
+        post '/api/v1/poker_hands', params: request
+        @json          = JSON.parse(response.body)
+        @expected_json = {"error" => [
+                                      {"card"=>"s9 SP S11 S12S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"}
+                                      ]
+                          }
+
+      end
+
+      it 'リクエストが201 Created となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(201)
+      end
+      it '期待した JSON を返すこと' do
+        expect(@json).to eq @expected_json
+      end
     end
+
+
+    context 'エラーのあるものとないものが混在している場合' do
+      before do
+        request       = "{\"cards\":
+                                     [
+                                      \"S9S10 S11 S12 S13\",
+                                      \"S1.1 S10 S11 S12 S13\",
+                                      \"S9 S10 S11 S12 S13\",
+                                      \"01 S10 S11 S12 S13\",
+                                      \"S12 H12 C12 D12 C5\"
+                                     ]
+                           }"
+
+        post '/api/v1/poker_hands', params: request
+        @json          = JSON.parse(response.body)
+        @expected_json = {"error" => [
+                                      {"card"=>"S9S10 S11 S12 S13", "msg"=>"5つのカード指定文字を半角スペース区切りで入力してください。"},
+                                      {"card"=>"S1.1 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(S1.1) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"},
+                                      {"card"=>"01 S10 S11 S12 S13", "msg"=>"1番目のカード指定文字が不正です。(01) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"}
+                                      ],
+                         "result" => [
+                                      {"card"=>"S9 S10 S11 S12 S13", "hand"=>"ストレートフラッシュ", "best"=>"true"},
+                                      {"card"=>"S12 H12 C12 D12 C5", "hand"=>"フォー・オブ・ア・カインド", "best"=>"false"}
+                                      ]
+                         }
+      end
+
+      it 'リクエストが201 Created となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(201)
+      end
+      it '期待した JSON を返すこと' do
+        expect(@json).to eq @expected_json
+      end
+    end
+
+
+
+  end
 end
+
+
