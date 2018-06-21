@@ -1,6 +1,5 @@
 require_relative '../rails_helper'
 
-# RSpec.describe "Poker_hands", type: :request do
 RSpec.describe API::Ver1::Poker_hands, type: :request do
 
   describe 'POST /api/v1/poker_hands' do
