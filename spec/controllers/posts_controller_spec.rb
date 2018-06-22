@@ -20,22 +20,22 @@ RSpec.describe PostsController, type: :controller do
         post :result, params: @post
         @yaku = "ストレートフラッシュ"
       end
-        it 'リクエストが200 OK となること' do
-          expect(response).to be_success
-          expect(response.status).to eq(200)
-        end
-        it '@postに期待した値が入ること' do
-          expect(assigns(:post)).to eq "S9 S10 S11 S12 S13"
-        end
-        it '@yakuに期待した値が入ること' do
-          expect(assigns(:yaku)).to eq @yaku
-        end
-        it '@errorに期待した値が入ること' do
-          expect(assigns(:error)).to eq nil
-        end
-        it ' :topを表示すること' do
-          expect(response).to render_template :top
-        end
+      it 'リクエストが200 OK となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(200)
+      end
+      it '@postに期待した値が入ること' do
+        expect(assigns(:post)).to eq "S9 S10 S11 S12 S13"
+      end
+      it '@yakuに期待した値が入ること' do
+        expect(assigns(:yaku)).to eq @yaku
+      end
+      it '@errorに期待した値が入ること' do
+        expect(assigns(:error)).to eq nil
+      end
+      it ' :topを表示すること' do
+        expect(response).to render_template :top
+      end
     end
 
     context '値が正常に入力される場合（ストレート）' do
@@ -238,16 +238,16 @@ RSpec.describe PostsController, type: :controller do
         @post = {content: "S9 S11 S12 S13"}
         post :result, params: @post
       end
-        it 'リクエストが200 OK となること' do
-          expect(response).to be_success
-          expect(response.status).to eq(200)
-        end
-        it '@postに期待した値が入ること' do
-          expect(assigns(:post)).to eq "S9 S11 S12 S13"
-        end
-        it '@errorに期待した値が入ること' do
-          expect(assigns(:error_message)).to eq "5つのカード指定文字を半角スペース区切りで入力してください。"
-        end
+      it 'リクエストが200 OK となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(200)
+      end
+      it '@postに期待した値が入ること' do
+        expect(assigns(:post)).to eq "S9 S11 S12 S13"
+      end
+      it '@errorに期待した値が入ること' do
+        expect(assigns(:error_message)).to eq "5つのカード指定文字を半角スペース区切りで入力してください。"
+      end
       it ' :topを表示すること' do
         expect(response).to render_template :top
       end
@@ -429,19 +429,19 @@ RSpec.describe PostsController, type: :controller do
         @post = {content: "9 S10 S11 S12 S13"}
         post :result, params: @post
       end
-        it 'リクエストが200 OK となること' do
-          expect(response).to be_success
-          expect(response.status).to eq(200)
-        end
-        it '@postに期待した値が入ること' do
-          expect(assigns(:post)).to eq "9 S10 S11 S12 S13"
-        end
-        it '@errorに期待した値が入ること' do
-          expect(assigns(:error_message)).to eq "1番目のカード指定文字が不正です。(9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
-        end
-        it ' :topを表示すること' do
-          expect(response).to render_template :top
-        end
+      it 'リクエストが200 OK となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(200)
+      end
+      it '@postに期待した値が入ること' do
+        expect(assigns(:post)).to eq "9 S10 S11 S12 S13"
+      end
+      it '@errorに期待した値が入ること' do
+        expect(assigns(:error_message)).to eq "1番目のカード指定文字が不正です。(9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+      end
+      it ' :topを表示すること' do
+        expect(response).to render_template :top
+      end
     end
 
 
@@ -450,20 +450,20 @@ RSpec.describe PostsController, type: :controller do
         @post = {content: "S９ S10 S11 S12 S13"}
         post :result, params: @post
       end
-        it 'リクエストが200 OK となること' do
-          expect(response).to be_success
-          expect(response.status).to eq(200)
-        end
-        it '@postに期待した値が入ること' do
-          expect(assigns(:post)).to eq "S９ S10 S11 S12 S13"
-        end
-        it '@errorに期待した値が入ること' do
-          expect(assigns(:error_message)).to eq "1番目のカード指定文字が不正です。(S９) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
-        end
-        it ' :topを表示すること' do
-          expect(response).to render_template :top
-        end
-     end
+      it 'リクエストが200 OK となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(200)
+      end
+      it '@postに期待した値が入ること' do
+        expect(assigns(:post)).to eq "S９ S10 S11 S12 S13"
+      end
+      it '@errorに期待した値が入ること' do
+        expect(assigns(:error_message)).to eq "1番目のカード指定文字が不正です。(S９) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+      end
+      it ' :topを表示すること' do
+        expect(response).to render_template :top
+      end
+    end
 
 
     context '半角小文字' do
@@ -471,19 +471,19 @@ RSpec.describe PostsController, type: :controller do
         @post = {content: "s9 S10 S11 S12 S13"}
         post :result, params: @post
       end
-        it 'リクエストが200 OK となること' do
-          expect(response).to be_success
-          expect(response.status).to eq(200)
-        end
-        it '@postに期待した値が入ること' do
-          expect(assigns(:post)).to eq "s9 S10 S11 S12 S13"
-        end
-        it '@errorに期待した値が入ること' do
-          expect(assigns(:error_message)).to eq "1番目のカード指定文字が不正です。(s9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
-        end
-        it ' :topを表示すること' do
-          expect(response).to render_template :top
-        end
+      it 'リクエストが200 OK となること' do
+        expect(response).to be_success
+        expect(response.status).to eq(200)
+      end
+      it '@postに期待した値が入ること' do
+        expect(assigns(:post)).to eq "s9 S10 S11 S12 S13"
+      end
+      it '@errorに期待した値が入ること' do
+        expect(assigns(:error_message)).to eq "1番目のカード指定文字が不正です。(s9) ,半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+      end
+      it ' :topを表示すること' do
+        expect(response).to render_template :top
+      end
     end
 
     context 'SDHC以外の英字半角大文字' do
@@ -888,4 +888,3 @@ RSpec.describe PostsController, type: :controller do
 
   end
 end
-
