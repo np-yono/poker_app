@@ -4,7 +4,7 @@ include Common_Checker
 
 RSpec.describe Common_Checker do
 
-  describe '#hand_action' do
+  describe '#hand_check' do
 
     # checkアクション（役判定）###################################################################################
     context 'validationを抜けて役判定される' do
