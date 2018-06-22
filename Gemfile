@@ -29,7 +29,6 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-gem 'sqlite3'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -40,6 +39,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'rspec-rails', '~> 3.7.2'
+  gem 'sqlite3'
   #gem 'factory_girl_rails', '~> 3.0'
   #gem 'guard-rspec'
   #gem 'spring-commands-rspec'
@@ -65,6 +65,9 @@ group :test do
   #gem 'launchy'
 end
 
+group :production do
+  gem 'pg'
+end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
