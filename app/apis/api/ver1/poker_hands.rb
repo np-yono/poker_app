@@ -1,11 +1,14 @@
-require_relative '../../../controllers/concerns/common'
-include Common
+require_relative '../../../controllers/concerns/common_checker'
+require_relative '../../../validator/common_validator'
+include Common_Checker
+include Common_Validator
 
 module API
   module Ver1
     class Poker_hands < Grape::API
       resource :poker_hands do
 
+        error_message = "不正なリクエストです。"
 
         # POST /api/v1/poker_hands
 
@@ -14,37 +17,34 @@ module API
         #  error!('指定のURLを入力してください。')
         # end
 
-        # 未入力のvalidation
+        # 形式のvalidation
         # if
-        #  error!('入力してください。')
+        #  error!('JSONで入力してください。')
         # end
+
 
 
         post do
 
-          # 形式のvalidation
-          # if
-          #  error!('JSONで入力してください。')
-          # end
+          # 未入力のvalidation
+          if params.empty?
+           error!(error: {msg: error_message})
+          end
 
           # requestを受け取る
           post = JSON.parse request.body.read
 
            # keyのvalidation
-           if post.keys.count != 1
-             error!('keyは１つにしてください。')
-           elsif post.keys.join("") != "cards"
-             error!('keyはcardsと入力してください。')
+           if post.keys.join("") != "cards"
+             error!(error: {msg: error_message})
            end
 
            # 配列の取り出し
            poker_posts = post["cards"]
 
           # 配列のvalidation
-          if poker_posts.class != Array
-            error!('cardsのvalueは配列で入力してください。')
-          elsif poker_posts.empty?
-            error!('配列の要素がありません。')
+          if poker_posts.empty?
+            error!(error: {msg: error_message})
           end
 
           params do
@@ -63,16 +63,15 @@ module API
            poker_posts.each do |poker_post|
             @post = poker_post
 
-            check
+            hand_valid
 
-            if @hash.has_value?(0)
-              @hash.store(:hands, @error)
-              error_array.push(@hash)
-            else
+            if @common_error_array.last == "no problem"
+              hand_check
               poker_array.push(@hash)
+              points_array.push(@hash[:best])
+            else
+              error_array.push(card: @post,msg: @common_error_array.last)
             end
-
-            points_array.push(@point)
 
            end
 
@@ -90,24 +89,13 @@ module API
             end
           end
 
-          error_array.each do |small_error|
-            small_error.store(:best,"error")
-          end
-
-
 
           # response
           poker_hash = {}
 
-          if poker_array.empty?
-          else
-            poker_hash.store("result", poker_array)
-          end
+          poker_hash.store("result", poker_array) unless poker_array.empty?
 
-          if error_array.empty?
-          else
-            poker_hash.store("error", error_array)
-          end
+          poker_hash.store("error", error_array) unless error_array.empty?
 
           poker_hash
 
