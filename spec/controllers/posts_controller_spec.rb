@@ -4,6 +4,7 @@ RSpec.describe PostsController, type: :controller do
 
   <<-NOTE
              ## 正常に入力される場合
+
              ## 正常に入力されない場合
                 ## Common_validation 1 にはじかれるケース
                 ## Common_validation 2 にはじかれるケース
