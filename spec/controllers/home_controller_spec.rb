@@ -2,6 +2,8 @@ require_relative '../rails_helper'
 
 RSpec.describe HomeController, type: :controller do
 
+  'home_controllerに関するテスト'
+
   # top アクション
   describe 'GET #top' do
     before do

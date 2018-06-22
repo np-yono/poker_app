@@ -31,11 +31,11 @@ module Common_Validator
         suits_element = item.split("")[0]
         numbers_element = item.delete(suits_element).to_i
 
-         if item.delete(suits_element)[0] == "0"
+         if item.scan(/[^A-Za-z0-9 ]/).count != 0
            validation_array2.push("#{m}番目のカード指定文字が不正です。(#{item}) ")
-         elsif item.include?("*") || item.include?("/") || item.include?("%") || item.include?("-") || item.include?("+") || item.include?(".")
+         elsif item.delete(suits_element)[0] == "0"
            validation_array2.push("#{m}番目のカード指定文字が不正です。(#{item}) ")
-         elsif /[SDHC]/ === suits_element && item.scan(/[SDHC]/).count == 1 && numbers_element > 0 && numbers_element < 14
+         elsif /[SDHC]/ === suits_element && item.scan(/[SDHC]/).count == 1 && numbers_element >= 1 && numbers_element <= 13
            validation_array2.push("no problem")
          else
            validation_array2.push("#{m}番目のカード指定文字が不正です。(#{item}) ")

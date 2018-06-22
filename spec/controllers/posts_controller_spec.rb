@@ -2,6 +2,14 @@ require_relative '../rails_helper'
 
 RSpec.describe PostsController, type: :controller do
 
+  <<-NOTE
+             ## 正常に入力される場合
+             ## 正常に入力されない場合
+                ## Common_validation 1 にはじかれるケース
+                ## Common_validation 2 にはじかれるケース
+                ## Common_validation 1とCommon_validation 2にはじかれるエラーが混在しているケース
+                ## Common_validation 2にはじかれるエラーが混在しているケース
+  NOTE
 
   # 正常に入力される場合 ##################################################################################################################################
   describe 'Post #result' do
@@ -771,7 +779,7 @@ RSpec.describe PostsController, type: :controller do
       end
     end
 
-    # Common_validation 1とCommon_validation 2にはじかれる　エラーが混在している場合 ######################################################################################################
+    # Common_validation 1とCommon_validation 2にはじかれるエラーが混在しているケース ######################################################################################################
 
     context 'Common_validation 1にはじかれるエラーが優先される' do
       before do
@@ -794,7 +802,7 @@ RSpec.describe PostsController, type: :controller do
     end
 
 
-    # Common_validation 2にはじかれるエラーが混在している場合 ################################################################################################################################
+    # Common_validation 2にはじかれるエラーが混在しているケース ################################################################################################################################
 
     context 'エラーが2つ' do
       before do

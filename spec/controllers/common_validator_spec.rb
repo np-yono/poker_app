@@ -4,6 +4,9 @@ require_relative '../../app/validator/common_validator'
 include Common_Validator
 
 RSpec.describe Common_Validator do
+
+  'Common_Validatorに関するテスト'
+
   describe '#hand_valid' do
 
     # validation 1 にはじかれるケース　理由は要素が５つないこと ################################################################################################################################

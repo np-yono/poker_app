@@ -15,11 +15,6 @@ module API
         #  error!("error":{"msg": error_message})
         # end
 
-        # 未入力のvalidation
-        # if
-        #  error!("error":{"msg": error_message})
-        # end
-
         # 形式のvalidation
         # if
         #   error!("error":{"msg": error_message})
@@ -29,11 +24,17 @@ module API
 
         post do
 
+          # 未入力のvalidation
+          if params.count == 0
+            error!("error":{"msg": error_message})
+          end
+
           # requestを受け取る
           post = JSON.parse request.body.read
 
+
           # keyのvalidation
-          if post.keys.count != 1 || post.keys.join("") != "cards"
+          if post.keys.join("") != "cards"
             error!("error":{"msg": error_message})
           end
 
@@ -46,6 +47,7 @@ module API
           if poker_posts.empty?
             error!("error":{"msg": error_message})
           end
+
 
           params do
             requires :cards, type: String

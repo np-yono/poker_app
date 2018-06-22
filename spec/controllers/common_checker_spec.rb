@@ -4,6 +4,8 @@ include Common_Checker
 
 RSpec.describe Common_Checker do
 
+  'Common_Checkerに関するテスト'
+
   describe '#hand_check' do
 
     # checkアクション（役判定）###################################################################################
