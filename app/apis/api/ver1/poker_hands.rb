@@ -1,53 +1,51 @@
-require_relative '../../../controllers/concerns/common_checker'
-require_relative '../../../validator/common_validator'
-include Common_Checker
-include Common_Validator
+require_relative '../../../controllers/concerns/common'
+include Common
 
 module API
   module Ver1
     class Poker_hands < Grape::API
       resource :poker_hands do
 
-        error_message = "不正なリクエストです。"
-
-        # URLのvalidation
-        # if
-        #  error!("error":{"msg": error_message})
-        # end
-
-        # 形式のvalidation
-        # if
-        #   error!("error":{"msg": error_message})
-        # end
 
         # POST /api/v1/poker_hands
 
+        # URLのvalidation
+        # if
+        #  error!('指定のURLを入力してください。')
+        # end
+
+        # 未入力のvalidation
+        # if
+        #  error!('入力してください。')
+        # end
+
+
         post do
 
-          # 未入力のvalidation
-          if params.count == 0
-            error!("error":{"msg": error_message})
-          end
+          # 形式のvalidation
+          # if
+          #  error!('JSONで入力してください。')
+          # end
 
           # requestを受け取る
           post = JSON.parse request.body.read
 
+           # keyのvalidation
+           if post.keys.count != 1
+             error!('keyは１つにしてください。')
+           elsif post.keys.join("") != "cards"
+             error!('keyはcardsと入力してください。')
+           end
 
-          # keyのvalidation
-          if post.keys.join("") != "cards"
-            error!("error":{"msg": error_message})
-          end
-
-
-          # 配列の取り出し
-          poker_posts = post["cards"]
-
+           # 配列の取り出し
+           poker_posts = post["cards"]
 
           # 配列のvalidation
-          if poker_posts.empty?
-            error!("error":{"msg": error_message})
+          if poker_posts.class != Array
+            error!('cardsのvalueは配列で入力してください。')
+          elsif poker_posts.empty?
+            error!('配列の要素がありません。')
           end
-
 
           params do
             requires :cards, type: String
@@ -55,24 +53,26 @@ module API
 
 
           # 役判定
+
             poker_array = []
+
             error_array = []
+
            points_array = []
 
-          poker_posts.each do |poker_post|
+           poker_posts.each do |poker_post|
             @post = poker_post
 
-            hand_valid
+            check
 
-            if @common_error_array.last == "no problem"
-
-              hand_check
-
-              poker_array.push(@hash)
-              points_array.push(@hash[:best])
+            if @hash.has_value?(0)
+              @hash.store(:hands, @error)
+              error_array.push(@hash)
             else
-              error_array.push( {card: @post,msg: @common_error_array.last} )
+              poker_array.push(@hash)
             end
+
+            points_array.push(@point)
 
            end
 
@@ -90,13 +90,24 @@ module API
             end
           end
 
+          error_array.each do |small_error|
+            small_error.store(:best,"error")
+          end
+
+
 
           # response
           poker_hash = {}
 
-          poker_hash.store("result", poker_array) unless poker_array.empty?
+          if poker_array.empty?
+          else
+            poker_hash.store("result", poker_array)
+          end
 
-          poker_hash.store("error", error_array) unless error_array.empty?
+          if error_array.empty?
+          else
+            poker_hash.store("error", error_array)
+          end
 
           poker_hash
 
